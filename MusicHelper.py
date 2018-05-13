@@ -18,13 +18,8 @@ class MusicHelper():
         for i in range(0, len(noteList)): #for each item in notelist
             if noteList[i] != 0: # -1 means the string is not used
                 noteToAppend = string_map[i][noteList[i]-1]
-                print string_map[i]
-                print noteList[i]-1
-                print "===="
                 LEDs_to_light.append(noteToAppend)
-
-        print LEDs_to_light
-        
+                
         l = LED_Controller()
         l.pushArrToLEDS(LEDs_to_light)
         

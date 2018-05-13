@@ -8,6 +8,8 @@ from grovepi import *
 
 from test import test
 
+from Score import Score
+from Music import Music
 from messageParser import messageParser
 
 def on_connect(client, userdata, flags, rc):
@@ -21,9 +23,24 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, message):
     mp = messageParser()
-        #mp.messageParse(message.payload)
-    thread = threading.Thread(target = mp.messageParse, args = (message.payload, ))
+    list = mp.messageParse(message.payload)
+    
+    song = list[0]
+    difficulty = list[1]
+    
+    m = Music()
+    thread = threading.Thread(target = m.playSong, args = (song,difficulty,))
+    
+    if song != "Test":
+        s = Score()
+        score = s.getScore(song, difficulty)
+        
+        mqttc.publish("score", payload=score)
+
+    
     thread.start()
+    thread.join()
+    
 Connected = False # Global variable
 port = "13346"
 broker_address = "m23.cloudmqtt.com"
